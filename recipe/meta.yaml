@@ -10,12 +10,14 @@ source:
   sha256: 0efd6ca976b563dd28a85aaaffeb96bb6b4881f4ca528975ee629e20316423bf
 
 build:
-  skip: True  # [py<310]
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  entry_points:
+    - mcp-compose = mcp_compose.cli:main
+  skip: True  # [py<310]
 
 requirements:
-  build:
+  host:
     - python
     - pip
     - hatchling >=1.21
@@ -28,6 +30,7 @@ requirements:
     - httpx >=0.25.0
     - importlib-metadata >=4.8.0
     - mcp >=1.2.1
+    - typer # mcp cli extra
     - prometheus_client
     - psutil >=5.9.0
     - pyjwt >=2.8.0
@@ -35,18 +38,19 @@ requirements:
     - python-dotenv >=1.0.0
     - sse-starlette >=1.8.0
     - toml >=0.10.2
-    - tomli >=2.0.0
+    - tomli >=2.0.0 # [py<311]
     - typing-extensions >=4
-    - uvicorn >=0.24.0
+    - uvicorn-standard >=0.24.0
+  run_constrained:
+    - opentelemetry-api >=1.20.0
+    - opentelemetry-sdk >=1.20.0
+    - opentelemetry-exporter-otlp-proto-http >=1.20.0
 
 test:
   imports:
     - mcp_compose
   commands:
-    # Exercise the real CLI via -m so sys.argv is correct. The mcp-compose console entry
-    # point on some Windows conda installs has been observed to exit 1 for --help (argv
-    # not forwarded); python -m mcp_compose.cli matches the setuptools script behavior.
-    - python -m mcp_compose.cli --help
+    - mcp-compose --help
     - pip check
   requires:
     - pip
@@ -57,8 +61,7 @@ about:
   description: |
     A powerful, production-ready framework for composing and orchestrating Model
     Context Protocol (MCP) servers with advanced management capabilities, REST API,
-    and modern Web UI.  # Remember to specify the license variants for BSD, Apache,
-    GPL, and LGPL.
+    and modern Web UI.
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE

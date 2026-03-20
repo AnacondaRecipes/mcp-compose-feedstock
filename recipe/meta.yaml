@@ -43,8 +43,10 @@ test:
   imports:
     - mcp_compose
   commands:
-    # Print exit code (ERRORLEVEL on Windows) so CI logs show the CLI result even when quiet.
-    - python -c "import subprocess, sys; r = subprocess.run(['mcp-compose', '--help']); print('mcp-compose exit code (ERRORLEVEL on Windows):', r.returncode); sys.exit(r.returncode)"
+    # Exercise the real CLI via -m so sys.argv is correct. The mcp-compose console entry
+    # point on some Windows conda installs has been observed to exit 1 for --help (argv
+    # not forwarded); python -m mcp_compose.cli matches the setuptools script behavior.
+    - python -m mcp_compose.cli --help
     - pip check
   requires:
     - pip

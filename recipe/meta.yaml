@@ -1,45 +1,76 @@
-{% set name = "<PLEASE ADD PKG NAME>" %}
-{% set version = "<PLEASE ADD PKG VERSION>" %}
+{% set name = "mcp-compose" %}
+{% set version = "0.1.11" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: <sha256>
+  url: https://github.com/datalayer/{{ name }}/archive/refs/tags/v{{ version }}.zip
+  sha256: 0efd6ca976b563dd28a85aaaffeb96bb6b4881f4ca528975ee629e20316423bf
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<38]
+  entry_points:
+    - mcp-compose = mcp_compose.cli:main
+  skip: True  # [py<310]
 
 requirements:
   host:
     - python
     - pip
+    - hatchling >=1.21
   run:
     - python
+    - cryptography >=41.0.0
+    # Use fastapi-core (library) instead of the fastapi metapackage to avoid pulling
+    # fastapi-cli alongside fastapi-core, which both ship scripts/fastapi.exe on Windows.
+    - fastapi-core >=0.104.0
+    - httpx >=0.25.0
+    - importlib-metadata >=4.8.0
+    - mcp >=1.2.1
+    - typer # mcp cli extra
+    - prometheus_client
+    - psutil >=5.9.0
+    - pyjwt >=2.8.0
+    - pydantic >=2
+    - python-dotenv >=1.0.0
+    - sse-starlette >=1.8.0
+    - toml >=0.10.2
+    - tomli >=2.0.0 # [py<311]
+    - typing-extensions >=4
+    - uvicorn-standard >=0.24.0
+  run_constrained:
+    - opentelemetry-api >=1.20.0
+    - opentelemetry-sdk >=1.20.0
+    - opentelemetry-exporter-otlp-proto-http >=1.20.0
 
 test:
   imports:
-    - {{ name.replace('-', '.') }}
+    - mcp_compose
+  commands:
+    - mcp-compose --help
+    - pip check
   requires:
     - pip
-  commands:
-    - pip check
 
 about:
-  home: <PLEASE ADD HOME URL>
-  summary: <PLEASE ADD SUMMARY>
+  home: https://github.com/datalayer/mcp-compose
+  summary: Composition server for the Model Context Protocol (MCP).
   description: |
-    <PLEASE ADD DESCRIPTION>
-  license: <PLEASE ADD LICENSE>
-  license_family: <PLEASE ADD LICENSE_FAMILY>
-  license_file: <PLEASE_ADD_LICENSE_FILE>
-  dev_url: <PLEASE ADD DEV URL>
-  doc_url: <PLEASE ADD DOC URL>
+    A powerful, production-ready framework for composing and orchestrating Model
+    Context Protocol (MCP) servers with advanced management capabilities, REST API,
+    and modern Web UI.
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  doc_url: https://github.com/datalayer/mcp-compose
+  dev_url: https://github.com/datalayer/mcp-compose
 
 extra:
   recipe-maintainers:
-    - Jrice1317
+    - datalayer
+    - echarles
+    - eleonorecharles
+    - goanpeca

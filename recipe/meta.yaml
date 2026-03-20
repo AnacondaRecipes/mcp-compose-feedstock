@@ -22,7 +22,9 @@ requirements:
   run:
     - python
     - cryptography >=41.0.0
-    - fastapi >=0.104.0
+    # Use fastapi-core (library) instead of the fastapi metapackage to avoid pulling
+    # fastapi-cli alongside fastapi-core, which both ship scripts/fastapi.exe on Windows.
+    - fastapi-core >=0.104.0
     - httpx >=0.25.0
     - importlib-metadata >=4.8.0
     - mcp >=1.2.1
@@ -41,7 +43,8 @@ test:
   imports:
     - mcp_compose
   commands:
-    - mcp-compose --help
+    # Print exit code (ERRORLEVEL on Windows) so CI logs show the CLI result even when quiet.
+    - python -c "import subprocess, sys; r = subprocess.run(['mcp-compose', '--help']); print('mcp-compose exit code (ERRORLEVEL on Windows):', r.returncode); sys.exit(r.returncode)"
     - pip check
   requires:
     - pip

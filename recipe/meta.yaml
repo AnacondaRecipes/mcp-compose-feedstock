@@ -53,7 +53,7 @@ test:
 
 about:
   home: https://github.com/datalayer/mcp-compose
-  summary: 'Composition server for the Model Context Protocol (MCP).'
+  summary: Composition server for the Model Context Protocol (MCP).
   description: |
     A powerful, production-ready framework for composing and orchestrating Model
     Context Protocol (MCP) servers with advanced management capabilities, REST API,

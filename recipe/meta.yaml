@@ -1,5 +1,5 @@
 {% set name = "mcp-compose" %}
-{% set version = "0.1.11" %}
+{% set version = "0.1.12" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/datalayer/{{ name }}/archive/refs/tags/v{{ version }}.zip
-  sha256: 0efd6ca976b563dd28a85aaaffeb96bb6b4881f4ca528975ee629e20316423bf
+  sha256: a325037c8df5f15c4c1e0d6aca8d0d57f79a83088f3193084315b9a6c63fddfe
 
 build:
   number: 0

@@ -49,10 +49,10 @@ requirements:
 # Windows: these four modules call POSIX-only executables (cat, sh -c) that are not available in the conda win-64 test env,
 #  causing [WinError 2] failures. Upstream tests are not guarded with skipif(win32), so they are excluded on win-64 only.
 {% set ignored_tests = "" %}
-{% set ignored_tests = ignored_tests + " --ignore=tests/test_process_manager.py" %}. # [win]
+{% set ignored_tests = ignored_tests + " --ignore=tests/test_process_manager.py" %}  # [win]
 {% set ignored_tests = ignored_tests + " --ignore=tests/test_composer_integration.py" %}  # [win]
-{% set ignored_tests = ignored_tests + " --ignore=tests/test_shutdown.py" %}. # [win]
-{% set ignored_tests = ignored_tests + " --ignore=tests/test_translator.py" %}. # [win]
+{% set ignored_tests = ignored_tests + " --ignore=tests/test_shutdown.py" %}  # [win]
+{% set ignored_tests = ignored_tests + " --ignore=tests/test_translator.py" %}  # [win]
 
 test:
   source_files:
